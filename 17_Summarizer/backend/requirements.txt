@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+python-dotenv
+langchain==0.3.2
+langchain-google-genai
+langchain-community
+unstructured
+requests
+validators
+youtube_transcript_api
+pydantic
+python-multipart
+crewai[google-genai]
+crewai_tools

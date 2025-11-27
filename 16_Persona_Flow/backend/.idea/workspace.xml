@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0c65fc2f-0e15-4907-91ea-1adb1958e520" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../../10_Character_Ai/backend.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../10_Character_Ai/backend.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../20_flowchart_maker/mycode/crew.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../20_flowchart_maker/output/b4838180-bea7-4b2f-a35a-17dcd4c43cec.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../20_flowchart_maker/output/b4838180-bea7-4b2f-a35a-17dcd4c43cec.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../20_flowchart_maker/output/b4838180-bea7-4b2f-a35a-17dcd4c43cec.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../20_flowchart_maker/output/d8ddfb6b-f736-4b4f-96f8-f51c57cb181b.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../20_flowchart_maker/output/d8ddfb6b-f736-4b4f-96f8-f51c57cb181b.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../20_flowchart_maker/output/d8ddfb6b-f736-4b4f-96f8-f51c57cb181b.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../check3.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../check3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../course_gen/llm.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../course_gen/llm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../main.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../../main.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../project_new/backend/llm_chain.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../project_new/backend/main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../project_new/streamlit_app.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../rag_pdf_project/PDF_Backend.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../rag_pdf_project/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../rag_pdf_project/sanket0404_2024.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../requirements.txt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "SachinGoyal94"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/SachinGoyal94/GEN-AI.git",
+    "accountId": "ccd124b0-757c-44fd-aa4d-d8e1c0e1379d"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="35noOo2fLplyLiexMlx1ioXvmMn" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "D:/GEN-AI/16_Persona_Flow/backend",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-PY-252.27397.106" />
+        <option value="bundled-python-sdk-4e2b1448bda8-9a97661f3031-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.27397.106" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0c65fc2f-0e15-4907-91ea-1adb1958e520" name="Changes" comment="" />
+      <created>1763755166888</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1763755166888</updated>
+      <workItem from="1763755168231" duration="127000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

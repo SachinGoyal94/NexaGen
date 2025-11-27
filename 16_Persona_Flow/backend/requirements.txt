@@ -1,0 +1,14 @@
+python-dotenv
+langchain_google_genai
+mysql-connector-python
+SQLAlchemy
+fastapi
+pydantic
+uvicorn
+tenacity
+sqlalchemy
+pymysql
+python-multipart
+crewai
+crewai_tools
+crewai[google-genai]
