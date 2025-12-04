@@ -74,3 +74,4 @@ litellm
 smolagents
 ddgs #for DuckDuckGOSearch
 matplotlib
+bytez
