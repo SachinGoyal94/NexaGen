@@ -317,7 +317,7 @@ We welcome contributions! Please follow these steps:
 - **Documentation**: Check the `/docs` folder for detailed guides
 - **Issues**: Report bugs on GitHub Issues
 - **Discussions**: Join community discussions on GitHub
-- **Email**: Contact maintainers at [maintainer-email]
+- **Email**: Contact maintainers at [sachingoyal9274@gmail.com]
 
 ### Common Issues
 - **API Connection Issues**: Ensure all backend services are running
@@ -326,7 +326,7 @@ We welcome contributions! Please follow these steps:
 
 ## 👥 Maintainers
 
-- **Project Lead**: [@SachinGoyal94](https://github.com/SachinGoyal94) - sachingoyal9274@gmail.com
+- **Project Lead**: [@SachinGoyal94](https://github.com/SachinGoyal94) 
 - **Backend Team**: [@SachinGoyal94](https://github.com/SachinGoyal94), [@raghav-1411](https://github.com/raghav-1411)
 - **Frontend Team**: [@itzzpriyal](https://github.com/itzzpriyal), [@vrindachhabra](https://github.com/vrindachhabra)
 - **AI/ML Team**: [@SachinGoyal94](https://github.com/SachinGoyal94)
