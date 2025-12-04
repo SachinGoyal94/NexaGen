@@ -1,0 +1,17 @@
+{
+  "watch": ["server.ts"],
+  "ext": "ts,tsx,js,jsx",
+  "ignore": [
+    "node_modules",
+    ".next",
+    "dist",
+    "build",
+    "*.log",
+    ".git",
+    "src/**/*.test.*",
+    "src/**/*.spec.*"
+  ],
+  "delay": 1000,
+  "verbose": false,
+  "exec": "npx tsx server.ts"
+}
