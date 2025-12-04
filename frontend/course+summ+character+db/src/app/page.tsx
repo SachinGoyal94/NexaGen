@@ -13,7 +13,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Loader2, MessageCircle, User, Lock, History, Trash2, Send, Bot, Settings, Sparkles, Clock, UserCircle, Users, FileText, GraduationCap, Database } from 'lucide-react'
+import { Loader2, MessageCircle, User, Lock, History, Trash2, Send, Bot, Settings, Sparkles, Clock, UserCircle, Users, FileText, GraduationCap, Database, Zap } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 interface ChatMessage {
@@ -45,12 +45,12 @@ export default function Home() {
   // Login form state
   const [loginUsername, setLoginUsername] = useState('')
   const [loginPassword, setLoginPassword] = useState('')
-  
+
   // Register form state
   const [registerUsername, setRegisterUsername] = useState('')
   const [registerPassword, setRegisterPassword] = useState('')
 
-  const API_BASE = 'https://my-ai-mitra.onrender.com'
+  const API_BASE = 'http://localhost:10000'
 
   // Auto scroll to bottom when new messages arrive
   useEffect(() => {
@@ -68,12 +68,12 @@ export default function Home() {
 
     try {
       const response = await fetch(url, { ...options, headers })
-      
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
         throw new Error(errorData.detail || `HTTP ${response.status}`)
       }
-      
+
       return await response.json()
     } catch (err) {
       throw new Error(err instanceof Error ? err.message : 'Network error')
@@ -103,13 +103,13 @@ export default function Home() {
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
         const errorMessage = errorData.detail || `Login failed (${response.status})`
-        
+
         // If API is down, offer mock mode
         if (response.status >= 500 || response.status === 400) {
           setError(`API Error: ${errorMessage}. The backend server appears to be down. Try Mock Mode to test the interface.`)
           return
         }
-        
+
         throw new Error(errorMessage)
       }
 
@@ -150,7 +150,7 @@ export default function Home() {
       setLoginPassword(registerPassword)
       setRegisterUsername('')
       setRegisterPassword('')
-      
+
       setTimeout(() => handleLogin(), 100)
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Registration failed'
@@ -677,6 +677,20 @@ export default function Home() {
                 </div>
                 <h3 className="font-semibold text-gray-800 mb-1">Summarizer</h3>
                 <p className="text-xs text-gray-600">Summarize content</p>
+              </CardContent>
+            </Card>
+
+            {/* Flowchart Generator Tool */}
+            <Card 
+              className="shadow-lg border-0 bg-gradient-to-br from-yellow-50 to-orange-50 hover:shadow-xl transition-all duration-300 hover:scale-[1.03] cursor-pointer"
+              onClick={() => router.push('/flowchart-generator')}
+            >
+              <CardContent className="p-4 text-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Zap className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-gray-800 mb-1">Flowchart Generator</h3>
+                <p className="text-xs text-gray-600">Create visual flowcharts</p>
               </CardContent>
             </Card>
           </div>
