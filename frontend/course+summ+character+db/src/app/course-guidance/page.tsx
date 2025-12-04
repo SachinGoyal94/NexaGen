@@ -10,7 +10,7 @@ import { Separator } from '@/components/ui/separator'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Loader2, BookOpen, Target, FileText, HelpCircle, GraduationCap, TrendingUp, Award, Lightbulb, Bot, Wifi, WifiOff } from 'lucide-react'
+import { Loader2, BookOpen, Target, FileText, HelpCircle, GraduationCap, TrendingUp, Award, Lightbulb, Bot, Wifi, WifiOff, Download, Copy, Check } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 interface CourseData {
@@ -27,6 +27,8 @@ export default function CourseGuidancePage() {
   const [courseData, setCourseData] = useState<CourseData | null>(null)
   const [mockMode, setMockMode] = useState(false)
   const [backendStatus, setBackendStatus] = useState<'checking' | 'online' | 'offline'>('checking')
+  const [copied, setCopied] = useState(false)
+  const [progress, setProgress] = useState(0)
   
   // Form state
   const [courseName, setCourseName] = useState('')
@@ -37,7 +39,6 @@ export default function CourseGuidancePage() {
   React.useEffect(() => {
     const checkBackendStatus = async () => {
       try {
-        // Test the actual course generation endpoint with minimal timeout
         const testResponse = await fetch(`${API_BASE}/generate/course`, {
           method: 'POST',
           headers: {
@@ -45,17 +46,13 @@ export default function CourseGuidancePage() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({ course: 'test' }),
-          signal: AbortSignal.timeout(3000) // 3 second timeout just to test connection
+          signal: AbortSignal.timeout(3000)
         })
-        
-        // If we get any response (even error), the backend is online
         setBackendStatus('online')
       } catch (error) {
-        // If we get a timeout, it means the backend is responding but slow
         if (error instanceof Error && error.name === 'AbortError') {
           setBackendStatus('online')
         } else {
-          // Other errors might mean CORS issues, but backend is probably still up
           setBackendStatus('online')
         }
       }
@@ -64,6 +61,22 @@ export default function CourseGuidancePage() {
     checkBackendStatus()
   }, [])
 
+  // Simulate progress bar during loading
+  React.useEffect(() => {
+    if (!isLoading) return
+    
+    const interval = setInterval(() => {
+      setProgress(prev => {
+        if (prev < 90) {
+          return prev + Math.random() * 15
+        }
+        return prev
+      })
+    }, 500)
+    
+    return () => clearInterval(interval)
+  }, [isLoading])
+
   const generateCourse = async () => {
     if (!courseName.trim()) {
       setError('Please enter a course name')
@@ -71,6 +84,7 @@ export default function CourseGuidancePage() {
     }
 
     setIsLoading(true)
+    setProgress(0)
     setError(null)
 
     try {
@@ -78,7 +92,8 @@ export default function CourseGuidancePage() {
 
       if (mockMode) {
         // Mock response for demo
-        await new Promise(resolve => setTimeout(resolve, 2000)) // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 2000))
+        setProgress(100)
         data = {
           course: `Course: ${courseName.trim()}\n\nA comprehensive course covering fundamental concepts and advanced techniques. This course is designed for beginners and progresses to advanced topics.\n\nDuration: 1 month\nLevel: Beginner to Advanced\n\nTopics:\n- Introduction to ${courseName.trim()}\n- Core Concepts and Principles\n- Advanced Techniques and Best Practices\n- Practical Applications and Projects`,
           
@@ -89,9 +104,8 @@ export default function CourseGuidancePage() {
           quiz: `Quiz for ${courseName.trim()}:\n\nQuestion 1: What is the primary purpose of ${courseName.trim()}?\nA) To provide entertainment\nB) To solve specific problems or achieve goals\nC) To complicate simple tasks\nD) To replace human workers entirely\n\nCorrect Answer: B\nExplanation: ${courseName.trim()} is primarily designed to solve specific problems and achieve particular goals efficiently and effectively.\n\nQuestion 2: Which skill is most important for mastering ${courseName.trim()}?\nA) Natural talent only\nB) Consistent practice and learning\nC) Expensive tools only\nD) Working in isolation\n\nCorrect Answer: B\nExplanation: Consistent practice and continuous learning are the keys to mastering any technical skill or subject.\n\nQuestion 3: What is the best approach to learning ${courseName.trim()}?\nA) Reading only theory\nB) Theory combined with practical application\nC) Watching videos only\nD) Memorizing everything at once\n\nCorrect Answer: B\nExplanation: The most effective learning approach combines theoretical knowledge with hands-on practical application.`
         }
       } else {
-        // Create a timeout controller - 5 minutes for course generation
         const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 300000) // 5 minutes timeout
+        const timeoutId = setTimeout(() => controller.abort(), 600000) // 10 minutes timeout
 
         try {
           const response = await fetch(`${API_BASE}/generate/course`, {
@@ -106,6 +120,7 @@ export default function CourseGuidancePage() {
           })
 
           clearTimeout(timeoutId)
+          setProgress(90)
 
           if (response.status === 422) {
             const errorData = await response.json()
@@ -117,13 +132,13 @@ export default function CourseGuidancePage() {
           }
 
           data = await response.json()
+          setProgress(100)
         } catch (fetchError) {
           clearTimeout(timeoutId)
           throw fetchError
         }
       }
       
-      // Parse the JSON response
       const parsedData: CourseData = {
         course: data.course || '',
         skills_analysis: data.skills_analysis || '',
@@ -132,12 +147,13 @@ export default function CourseGuidancePage() {
       }
       
       setCourseData(parsedData)
+      setProgress(100)
     } catch (err) {
       let errorMessage = 'Failed to generate course'
       
       if (err instanceof Error) {
         if (err.name === 'AbortError') {
-          errorMessage = 'Request timed out after 5 minutes. AI course generation can take time - try Mock Mode for instant results.'
+          errorMessage = 'Request timed out after 10 minutes. The AI course generation is taking longer than expected. Please try again or use Mock Mode for instant results.'
         } else if (err.message.includes('Failed to fetch')) {
           errorMessage = 'Backend server is not responding. The service may be temporarily unavailable.'
         } else if (err.message.includes('API validation failed')) {
@@ -150,6 +166,63 @@ export default function CourseGuidancePage() {
       setError(`${errorMessage}. Please try again or use Mock Mode.`)
     } finally {
       setIsLoading(false)
+      setProgress(0)
+    }
+  }
+
+  const downloadCourseAsText = () => {
+    if (!courseData) return
+
+    const content = `
+=== ${courseData.course.split('\n')[0]} ===
+
+COURSE OVERVIEW
+${courseData.course}
+
+---
+
+SKILLS ANALYSIS
+${courseData.skills_analysis}
+
+---
+
+COURSE CONTENT
+${courseData.content}
+
+---
+
+QUIZ
+${courseData.quiz}
+    `.trim()
+
+    const element = document.createElement('a')
+    const file = new Blob([content], { type: 'text/plain' })
+    element.href = URL.createObjectURL(file)
+    element.download = `${courseName.replace(/\s+/g, '_')}_course.txt`
+    document.body.appendChild(element)
+    element.click()
+    document.body.removeChild(element)
+  }
+
+  const copyToClipboard = async () => {
+    if (!courseData) return
+
+    const content = `
+COURSE: ${courseData.course}
+
+SKILLS: ${courseData.skills_analysis}
+
+CONTENT: ${courseData.content}
+
+QUIZ: ${courseData.quiz}
+    `.trim()
+
+    try {
+      await navigator.clipboard.writeText(content)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      setError('Failed to copy to clipboard')
     }
   }
 
@@ -170,11 +243,17 @@ export default function CourseGuidancePage() {
             transform: translateY(0);
           }
         }
+        @keyframes progress-fill {
+          0% { width: 0%; }
+        }
         .float-animation {
           animation: float 4s ease-in-out infinite;
         }
         .slide-up {
           animation: slide-up 0.6s ease-out;
+        }
+        .progress-bar {
+          animation: progress-fill 0.3s ease-out;
         }
       `}</style>
 
@@ -211,7 +290,7 @@ export default function CourseGuidancePage() {
               {mockMode ? (
                 <span className="text-green-600 font-medium"> Mock Mode: Instant demo data for testing.</span>
               ) : (
-                <span> Course generation takes 3-5 minutes as AI creates comprehensive content.</span>
+                <span> Course generation takes 3-15 minutes as AI creates comprehensive content.</span>
               )}
             </CardDescription>
           </CardHeader>
@@ -229,6 +308,7 @@ export default function CourseGuidancePage() {
                     generateCourse()
                   }
                 }}
+                disabled={isLoading}
               />
             </div>
             
@@ -244,6 +324,7 @@ export default function CourseGuidancePage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setMockMode(!mockMode)}
+                disabled={isLoading}
                 className={`text-xs ${mockMode ? 'bg-green-50 border-green-200 text-green-700' : 'bg-gray-50 border-gray-200 text-gray-700'}`}
               >
                 {mockMode ? '✓ Mock' : 'Live API'}
@@ -284,16 +365,32 @@ export default function CourseGuidancePage() {
                 )}
               </div>
             )}
+
+            {/* Progress Bar */}
+            {isLoading && (
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-700">Generating course...</span>
+                  <span className="text-xs text-gray-500">{Math.round(progress)}%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                  <div 
+                    className="bg-gradient-to-r from-blue-500 to-purple-600 h-full rounded-full progress-bar transition-all duration-300"
+                    style={{ width: `${progress}%` }}
+                  ></div>
+                </div>
+              </div>
+            )}
             
             <Button 
               onClick={generateCourse} 
               disabled={isLoading || !courseName.trim()}
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl h-12 text-lg"
+              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl h-12 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  {mockMode ? 'Generating Demo...' : 'Generating Course... (This may take 3-5 minutes)'}
+                  {mockMode ? 'Generating Demo...' : 'Generating Course... (3-15 min)'}
                 </>
               ) : (
                 <>
@@ -307,7 +404,7 @@ export default function CourseGuidancePage() {
 
         {/* Error Alert */}
         {error && (
-          <Alert className="mb-6 border-red-200 bg-red-50">
+          <Alert className="mb-6 border-red-200 bg-red-50 slide-up">
             <AlertDescription className="text-red-700">
               {error}
               {!mockMode && (
@@ -337,6 +434,35 @@ export default function CourseGuidancePage() {
                 </Badge>
               </div>
             )}
+
+            {/* Export Buttons */}
+            <div className="flex gap-2 justify-end">
+              <Button
+                onClick={downloadCourseAsText}
+                variant="outline"
+                className="flex items-center gap-2 border-blue-200 text-blue-700 hover:bg-blue-50"
+              >
+                <Download className="w-4 h-4" />
+                Download as Text
+              </Button>
+              <Button
+                onClick={copyToClipboard}
+                variant="outline"
+                className="flex items-center gap-2 border-purple-200 text-purple-700 hover:bg-purple-50"
+              >
+                {copied ? (
+                  <>
+                    <Check className="w-4 h-4" />
+                    Copied!
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4" />
+                    Copy All
+                  </>
+                )}
+              </Button>
+            </div>
             
             <Tabs defaultValue="course" className="w-full">
               <TabsList className="grid w-full grid-cols-4 bg-gray-100 p-1 rounded-xl">
@@ -358,7 +484,6 @@ export default function CourseGuidancePage() {
                 </TabsTrigger>
               </TabsList>
 
-              {/* Course Overview */}
               <TabsContent value="course" className="space-y-4">
                 <Card className="shadow-lg border-0 bg-gradient-to-br from-blue-50 to-indigo-50">
                   <CardHeader>
@@ -368,14 +493,15 @@ export default function CourseGuidancePage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="whitespace-pre-wrap text-gray-700">
-                      {courseData.course}
-                    </div>
+                    <ScrollArea className="h-[400px] pr-4">
+                      <div className="whitespace-pre-wrap text-gray-700">
+                        {courseData.course}
+                      </div>
+                    </ScrollArea>
                   </CardContent>
                 </Card>
               </TabsContent>
 
-              {/* Skills Analysis */}
               <TabsContent value="skills" className="space-y-4">
                 <Card className="shadow-lg border-0 bg-gradient-to-br from-green-50 to-emerald-50">
                   <CardHeader>
@@ -385,14 +511,15 @@ export default function CourseGuidancePage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="whitespace-pre-wrap text-gray-700">
-                      {courseData.skills_analysis}
-                    </div>
+                    <ScrollArea className="h-[400px] pr-4">
+                      <div className="whitespace-pre-wrap text-gray-700">
+                        {courseData.skills_analysis}
+                      </div>
+                    </ScrollArea>
                   </CardContent>
                 </Card>
               </TabsContent>
 
-              {/* Content */}
               <TabsContent value="content" className="space-y-4">
                 <Card className="shadow-lg border-0 bg-gradient-to-br from-purple-50 to-indigo-50">
                   <CardHeader>
@@ -402,14 +529,15 @@ export default function CourseGuidancePage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="whitespace-pre-wrap text-gray-700">
-                      {courseData.content}
-                    </div>
+                    <ScrollArea className="h-[400px] pr-4">
+                      <div className="whitespace-pre-wrap text-gray-700">
+                        {courseData.content}
+                      </div>
+                    </ScrollArea>
                   </CardContent>
                 </Card>
               </TabsContent>
 
-              {/* Quiz */}
               <TabsContent value="quiz" className="space-y-4">
                 <Card className="shadow-lg border-0 bg-gradient-to-br from-cyan-50 to-blue-50">
                   <CardHeader>
@@ -419,9 +547,11 @@ export default function CourseGuidancePage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="whitespace-pre-wrap text-gray-700">
-                      {courseData.quiz}
-                    </div>
+                    <ScrollArea className="h-[400px] pr-4">
+                      <div className="whitespace-pre-wrap text-gray-700">
+                        {courseData.quiz}
+                      </div>
+                    </ScrollArea>
                   </CardContent>
                 </Card>
               </TabsContent>

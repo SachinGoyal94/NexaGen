@@ -50,7 +50,7 @@ export default function Home() {
   const [registerUsername, setRegisterUsername] = useState('')
   const [registerPassword, setRegisterPassword] = useState('')
 
-  const API_BASE = 'http://localhost:10000'
+  const API_BASE = 'https://my-ai-mitra.onrender.com'
 
   // Auto scroll to bottom when new messages arrive
   useEffect(() => {
