@@ -163,43 +163,19 @@ export default function CharacterChat() {
         summary: p.summary,
         created_at: p.created_at
       })) || []
+      
+      console.log('Loaded personas:', mappedPersonas)
       setPersonas(mappedPersonas)
+      
+      // If no personas loaded, don't show error - just empty state
+      if (mappedPersonas.length === 0) {
+        console.log('No characters found for this user. User can create new ones.')
+      }
     } catch (err) {
       console.error('Failed to load personas:', err)
-      // Load mock personas for demo - try user ID 20 which we know has characters
-      try {
-        const fallbackPersonas = await apiCall(`/user/20/characters`)
-        const mappedFallbackPersonas = fallbackPersonas.characters?.map((p: any) => ({
-          id: p.persona_id,
-          character_name: p.character_name,
-          mode: p.mode,
-          tone: p.tone,
-          summary: p.summary,
-          created_at: p.created_at
-        })) || []
-        setPersonas(mappedFallbackPersonas)
-      } catch (fallbackErr) {
-        console.error('Fallback also failed, loading static mock personas')
-        const staticMockPersonas: Persona[] = [
-          {
-            id: 65,
-            character_name: 'Sunil gavaskar',
-            mode: 'auto',
-            tone: 'neutral',
-            summary: 'Legendary Indian cricketer known for his technical batting skills',
-            created_at: new Date().toISOString()
-          },
-          {
-            id: 37,
-            character_name: 'dhoni',
-            mode: 'auto',
-            tone: 'neutral',
-            summary: 'Mahendra Singh Dhoni - Former Indian cricket captain known for his calm demeanor and leadership',
-            created_at: new Date().toISOString()
-          }
-        ]
-        setPersonas(staticMockPersonas)
-      }
+      // Show empty list - let user create new characters
+      setPersonas([])
+      setError(null) // Don't show error for new users without characters
     }
   }
 
@@ -246,11 +222,11 @@ export default function CharacterChat() {
       console.log('Create persona response:', data)
       
       const newPersona: Persona = {
-        id: data.persona_id,
+        id: data.character_id,
         character_name: data.character_name,
         mode: mode,
-        tone: tone,
-        summary: data.summary,
+        tone: data.tone,
+        summary: customPrompt || `${characterName} - ${tone} character`,
         created_at: new Date().toISOString()
       }
 
