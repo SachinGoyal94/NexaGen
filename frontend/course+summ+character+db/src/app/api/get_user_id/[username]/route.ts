@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-// Persistent user database - maps usernames to their IDs
-// New users will be assigned sequentially starting from 100
-let userCounter = 100
+// Mock user database - in a real app, this would be in a database
 const mockUsers = new Map([
   ['gogo', 1],
   ['test', 2],
   ['demo', 3],
-  ['mera', 20]
+  ['mera', 20]  // Update mera to match external backend user ID
 ])
 
 export async function GET(
@@ -25,13 +23,17 @@ export async function GET(
     }
     
     // Get user ID from mock database
-    let userId = mockUsers.get(username)
+    const userId = mockUsers.get(username)
     
     if (!userId) {
-      // Create a consistent new user ID for unknown usernames
-      userId = userCounter++
-      mockUsers.set(username, userId)
-      console.log(`Created new user: ${username} with ID: ${userId}`)
+      // For specific usernames we know, return consistent IDs
+      if (username === 'mera') {
+        return NextResponse.json({ user_id: 20 })
+      }
+      // Create a new user ID for other unknown usernames
+      const newUserId = Date.now()
+      mockUsers.set(username, newUserId)
+      return NextResponse.json({ user_id: newUserId })
     }
     
     return NextResponse.json({ user_id: userId })
