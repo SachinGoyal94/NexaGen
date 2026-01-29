@@ -27,4 +27,3 @@ python-jose
 transformers
 python-multipart
 bcrypt==4.3.0
-MySQLdb
