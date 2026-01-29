@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 from dotenv import load_dotenv
 
 load_dotenv()
-DATABASE_URL = os.getenv("DATABASE_URL_ONLINE")
+DATABASE_URL = os.getenv("DATABASE_URL_ONLINE",connect_args={"ssl": {"ssl_mode": "REQUIRED"}},pool_pre_ping=True)
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
