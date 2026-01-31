@@ -84,7 +84,9 @@ class RegisterUser(BaseModel):
     username: str
     password: str
 
-
+@app.get("/health", status_code=status.HTTP_200_OK)
+def health_check():
+    return {"status": "healthy"}
 @app.post("/register")
 def register(user: RegisterUser, db: Session = Depends(get_db)):
     existing = db.query(User).filter(User.username == user.username).first()
