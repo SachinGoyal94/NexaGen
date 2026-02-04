@@ -41,12 +41,12 @@ def get_db():
 
 # ================= CREWAI SETUP =================
 gemini_llm = LLM(
-    model="gemini/gemini-2.0-flash-lite",
+    model="gemini/gemini-2.5-flash-lite",
     api_key=GEMINI_KEY,
     temperature=0.7
 )
 gemini_chat_llm = ChatGoogleGenerativeAI(
-    model="gemini-2.0-flash-lite",
+    model="gemini-2.5-flash-lite",
     google_api_key=GEMINI_KEY,
     temperature=0.4
 )
